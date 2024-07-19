@@ -1,9 +1,142 @@
-<html>
-  <head>
-    <title>Coba aja</title>
-    <body>
-      <p>Selamat Datang</p>
-      <p>Ini percobaan pertama saya</p>
-    </body>
-  </head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B_105012009_AHMAD</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 200px;
+            margin: 5px 0;
+            padding: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 5px 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Buatlah program penjualan berikut ini:</h2>
+        <form id="form">
+            <label for="nim">NIM:</label>
+            <input type="text" id="nim" name="nim" required><br><br>
+            
+            <label for="namaMatakuliah">Nama Matakuliah:</label>
+            <input type="text" id="namaMatakuliah" name="namaMatakuliah" required><br><br>
+            
+            <label for="nilaiAkhir">Nilai Akhir:</label>
+            <input type="number" id="nilaiAkhir" name="nilaiAkhir" oninput="hitungOtomatis()" required><br><br>
+            
+            <label for="index">INDEX:</label>
+            <input type="text" id="index" name="index" readonly><br><br>
+            
+            <label for="keterangan">KETERANGAN:</label>
+            <input type="text" id="keterangan" name="keterangan" readonly><br><br>
+
+            <button type="button" onclick="simpanData()">Simpan</button>
+            <button type="button" onclick="tampilkanData()">Tampilkan</button>
+        </form>
+        
+        <h3>NIM: <span id="nimDisplay"></span></h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama Mata Kuliah</th>
+                    <th>Nilai Akhir</th>
+                    <th>INDEX</th>
+                    <th>KETERANGAN</th>
+                </tr>
+            </thead>
+            <tbody id="dataTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let data = [];
+        let nimValue = '';
+
+        function hitungIndex(nilai) {
+            if (nilai >= 80 && nilai <= 100) return 'A';
+            if (nilai >= 68 && nilai <= 79) return 'B';
+            if (nilai >= 20 && nilai <= 67) return 'C';
+            return 'N/A';
+        }
+
+        function hitungKeterangan(index) {
+            if (index === 'A') return 'SANGAT BAIK';
+            if (index === 'B') return 'BAIK';
+            if (index === 'C') return 'TIDAK BAIK';
+            return 'N/A';
+        }
+
+        function hitungOtomatis() {
+            const nilaiAkhir = parseInt(document.getElementById('nilaiAkhir').value);
+            const index = hitungIndex(nilaiAkhir);
+            const keterangan = hitungKeterangan(index);
+
+            document.getElementById('index').value = index;
+            document.getElementById('keterangan').value = keterangan;
+        }
+
+        function simpanData() {
+            const nimInput = document.getElementById('nim');
+            if (!nimValue) {
+                nimValue = nimInput.value;
+                document.getElementById('nimDisplay').innerText = nimValue;
+                nimInput.disabled = true;
+            }
+
+            const namaMatakuliah = document.getElementById('namaMatakuliah').value;
+            const nilaiAkhir = parseInt(document.getElementById('nilaiAkhir').value);
+            const index = document.getElementById('index').value;
+            const keterangan = document.getElementById('keterangan').value;
+
+            data.push({
+                namaMatakuliah,
+                nilaiAkhir,
+                index,
+                keterangan
+            });
+
+            document.getElementById('form').reset();
+            document.getElementById('index').value = '';
+            document.getElementById('keterangan').value = '';
+        }
+
+        function tampilkanData() {
+            const dataTable = document.getElementById('dataTable');
+            dataTable.innerHTML = '';
+
+            data.forEach((item, index) => {
+                const row = dataTable.insertRow();
+                row.insertCell(0).innerText = index + 1;
+                row.insertCell(1).innerText = item.namaMatakuliah;
+                row.insertCell(2).innerText = item.nilaiAkhir;
+                row.insertCell(3).innerText = item.index;
+                row.insertCell(4).innerText = item.keterangan;
+            });
+        }
+    </script>
+</body>
 </html>
